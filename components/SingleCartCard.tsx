@@ -1,36 +1,45 @@
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "./ui/button";
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "./ui/select";
+import { useAppDispatch } from "@/hooks/redux";
+import { removeFromTheCart,updateItemQuantity } from "@/redux/cartSlice";
+import { FaMinus, FaPlus } from "react-icons/fa";
 
 const SingleCartCard = ({ item }: { item: any }) => {
+  const [counter, setCounter] = useState(item.quantity);
+  const dispatch = useAppDispatch();
+
+  const handleIncrement = () => {
+    const newCounter = counter + 1;
+    setCounter(newCounter);
+    dispatch(updateItemQuantity({ id: item.id, quantity: newCounter }));
+  };
+
+  const handleDecrement = () => {
+    const newCounter = counter - 1;
+    setCounter(newCounter);
+    dispatch(updateItemQuantity({ id: item.id, quantity: newCounter }));
+  };
+
   return (
     <div className="flex gap-4 p-5 justify-center border rounded-md">
       <Image className="rounded-lg" src={item.image} width={200} height={150} alt={item.title} />
       <div className="flex flex-col gap-5">
         <h1 className="text-white">{item.title}</h1>
         <p className="text-purple-500">{item.description}</p>
-        <div className="flex gap-5">
-        <Button className="bg-red-500 w-[20%]">Remove</Button>
-        <Select defaultValue="1">
-      <SelectTrigger className="w-[20%] bg-zinc-300 text-black">
-        <SelectValue placeholder="Quantity" />
-      </SelectTrigger>
-      <SelectContent>
-        <SelectGroup>
-          <SelectLabel>Quantity</SelectLabel>
-          <SelectItem value="1">1</SelectItem>
-          <SelectItem value="2">2</SelectItem>
-          <SelectItem value="3">3</SelectItem>
-          <SelectItem value="4">4</SelectItem>
-          <SelectItem value="5">5</SelectItem>
-        </SelectGroup>
-      </SelectContent>
-    </Select>
+        <div className="flex gap-5 items-center">
+          <Button onClick={() => {
+            dispatch(removeFromTheCart({ id: item.id }));
+          }} className="bg-red-500 w-[20%]">Remove</Button>
+
+          <div className="flex gap-4 ">
+            <Button onClick={handleDecrement} className="bg-gray-500 w-8 h-8"><FaMinus /></Button>
+            <h1 className="text-white">{counter}</h1>
+            <Button onClick={handleIncrement} className="bg-gray-500 w-8 h-8"><FaPlus /></Button>
+          </div>
         </div>
-        
       </div>
-        <p className="text-orange-500 font-bold text-xl">${item.price}</p>
+      <p className="text-orange-500 font-bold text-xl">${item.price}</p>
     </div>
   );
 };

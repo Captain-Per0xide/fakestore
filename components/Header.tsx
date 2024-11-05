@@ -48,9 +48,7 @@ const Header = () => {
         <Link href="/cart">
             
           <div className="flex flex-col items-center">
-            <h1 className="text-orange-400">{
-              cart.length
-              }</h1>
+            <h1 className="text-orange-400 ml-2">{cart.length}</h1>
             <FiShoppingCart className=" hover:text-red-500 text-2xl text-purple-400" />
           </div>
         </Link>
