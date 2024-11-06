@@ -5,7 +5,7 @@ import { useParams } from "next/navigation";
 
 import React, { useEffect } from "react";
 
-const page = () => {
+const Page = () => {
   const { id } = useParams();
   const {getSingleProduct, singleProduct}=useSupabase();
  useEffect(()=>{
@@ -20,4 +20,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;
